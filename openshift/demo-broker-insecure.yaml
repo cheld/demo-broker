@@ -73,7 +73,7 @@ parameters:
   displayName: Image name
   name: IMAGE
   required: true
-  value: quay.io/osb-starter-pack/servicebroker:latest
+  value: cheld/demobroker:latest
 
 - description: base64 encoded SSL CA Certificate
   displayName: base64 encoded SSL CA Certificate
