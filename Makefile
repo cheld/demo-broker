@@ -15,7 +15,7 @@ test: ## Runs the tests
 
 linux: ## Builds a Linux executable
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
-	go build -o servicebroker-linux --ldflags="-s" github.com/pmorie/osb-starter-pack/cmd/servicebroker
+	go build -o servicebroker-linux --ldflags="-s" github.com/cheld/demo-broker/cmd/servicebroker
 
 image: linux ## Builds a Linux based image
 	cp servicebroker-linux image/servicebroker

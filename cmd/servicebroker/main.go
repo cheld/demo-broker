@@ -17,10 +17,10 @@ import (
 	clientrest "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
+	"github.com/cheld/demo-broker/pkg/broker"
 	"github.com/pmorie/osb-broker-lib/pkg/metrics"
 	"github.com/pmorie/osb-broker-lib/pkg/rest"
 	"github.com/pmorie/osb-broker-lib/pkg/server"
-	"github.com/pmorie/osb-starter-pack/pkg/broker"
 )
 
 var options struct {
