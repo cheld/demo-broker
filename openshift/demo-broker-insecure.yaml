@@ -4,87 +4,17 @@ metadata:
   name: demo-broker
 objects:
 
-- apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: demo-broker-client
-
-- kind: Secret
-  apiVersion: v1
-  metadata:
-    name: demo-broker
-    annotations:
-      kubernetes.io/service-account.name: demo-broker-client
-  type: kubernetes.io/service-account-token
-
 - apiVersion: servicecatalog.k8s.io/v1beta1
   kind: ClusterServiceBroker
   metadata:
     name: demo-broker
   spec:
-    url: https://demo-broker.demo-broker.svc.cluster.local
-    caBundle: ${BROKER_CA_CERT}
-    authInfo:
-      bearer:
-        secretRef:
-          namespace: ${NAMESPACE}
-          name: demo-broker
-
-- kind: ServiceAccount
-  apiVersion: v1
-  metadata:
-    name: demo-broker
-
-- kind: ClusterRole
-  apiVersion: rbac.authorization.k8s.io/v1beta1
-  metadata:
-    name: demo-broker
-  rules:
-  - apiGroups: ["authentication.k8s.io"]
-    resources: ["tokenreviews"]
-    verbs: ["create"]
-  - apiGroups: ["authorization.k8s.io"]
-    resources: ["subjectaccessreviews"]
-    verbs: ["create"]
-
-- kind: ClusterRole
-  apiVersion: rbac.authorization.k8s.io/v1beta1
-  metadata:
-    name: access-demo-broker
-  rules:
-  - nonResourceURLs: ["/v2", "/v2/*"]
-    verbs: ["GET", "POST", "PUT", "PATCH", "DELETE"]
-
-- kind: ClusterRoleBinding
-  apiVersion: rbac.authorization.k8s.io/v1beta1
-  metadata:
-    name: demo-broker
-  subjects:
-    - kind: ServiceAccount
-      name: demo-broker
-      namespace: ${NAMESPACE}
-  roleRef:
-    kind: ClusterRole
-    name: demo-broker
-
-- kind: ClusterRoleBinding
-  apiVersion: rbac.authorization.k8s.io/v1beta1
-  metadata:
-    name: demo-broker-client
-  subjects:
-    - kind: ServiceAccount
-      name: demo-broker-client
-      namespace: ${NAMESPACE}
-  roleRef:
-    kind: ClusterRole
-    name: access-demo-broker
+    url: http://demo-broker.demo-broker.svc.cluster.local
 
 - kind: Service
   apiVersion: v1
   metadata:
     name: demo-broker
-    annotations:
-      service.alpha.openshift.io/serving-cert-secret-name: 'demo-broker-ssl'
     labels:
       app: demo-broker
   spec:
@@ -92,8 +22,8 @@ objects:
       app: demo-broker
     ports:
     - protocol: TCP
-      port: 443
-      targetPort: 8443
+      port: 80
+      targetPort: 8080
 - kind: Deployment
   apiVersion: extensions/v1beta1
   metadata:
@@ -110,7 +40,6 @@ objects:
         labels:
           app: demo-broker
       spec:
-        serviceAccount: demo-broker
         containers:
         - name: service-demo-broker
           image: ${IMAGE}
@@ -119,43 +48,25 @@ objects:
           - /opt/servicebroker/servicebroker
           args:
           - --port
-          - "8443"
+          - "8080"
           - -v
           - "4"
           - --logtostderr
-          - --tls-cert-file
-          - "/var/run/demo-broker/starterpack.crt"
-          - --tls-private-key-file
-          - "/var/run/demo-broker/starterpack.key"
-          - --authenticate-k8s-token
+          - --insecure
           - --catalogPath
           - ${CATALOG_PATH}
           ports:
-          - containerPort: 8443
+          - containerPort: 8080
           readinessProbe:
             httpGet:
               path: /healthz
-              scheme: HTTPS
-              port: 8443
+              scheme: HTTP
+              port: 8080
             failureThreshold: 1
             initialDelaySeconds: 10
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 2
-          volumeMounts:
-          - mountPath: /var/run/demo-broker
-            name: demo-broker-ssl
-            readOnly: true
-        volumes:
-        - name: demo-broker-ssl
-          secret:
-            defaultMode: 420
-            secretName: demo-broker-ssl
-            items:
-            - key: tls.crt
-              path: starterpack.crt
-            - key: tls.key
-              path: starterpack.key
 
 parameters:
 - description: Name of the image to use
@@ -167,7 +78,7 @@ parameters:
 - description: base64 encoded SSL CA Certificate
   displayName: base64 encoded SSL CA Certificate
   name: BROKER_CA_CERT
-  required: true
+  required: false
   value:
 
 - description: Namespace that the starter pack is deployed to
