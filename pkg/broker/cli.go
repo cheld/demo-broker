@@ -16,6 +16,6 @@ type Options struct {
 // It is called after the flags are added for the skeleton and before flag
 // parse is called.
 func AddFlags(o *Options) {
-	flag.StringVar(&o.CatalogPath, "catalogPath", "", "The path to the catalog")
+	flag.StringVar(&o.CatalogPath, "catalogPath", "https://raw.githubusercontent.com/cheld/k8s-demo/master/config/catalog.json", "The path to the catalog")
 	flag.BoolVar(&o.Async, "async", false, "Indicates whether the broker is handling the requests asynchronously.")
 }
