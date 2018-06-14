@@ -178,4 +178,4 @@ parameters:
 - description: URL to a json formated resource that represents the catalog
   displayName: catalogPath
   name: CATALOG_PATH
-  value: https://raw.githubusercontent.com/cheld/k8s-demo/master/config/catalog.json
+  value: https://raw.githubusercontent.com/cheld/demo-broker/master/samples/catalog.json
