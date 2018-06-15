@@ -2,7 +2,7 @@
    "services":[
       {
          "id":"4f6e6cf6-ffdd-425f-a2c7-3c9258ad246a",
-         "name":"example-ceiser-service",
+         "name":"example-service",
          "description":"New example service from the osb starter pack!",
          "bindable":true,
          "plan_updateable":true,
@@ -35,8 +35,8 @@
             }
          ],
          "metadata":{
-            "displayName":"Example ceiser backend service v2",
-            "imageUrl":"https://cdn.iconverticons.com/files/png/0174d53a1a739691_256x256.png"
+            "displayName":"Example backend service",
+            "imageUrl":"https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-gear-128.png"
          }
       }
    ]
