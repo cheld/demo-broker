@@ -2,13 +2,14 @@
 
 Demo broker is an implementation of the [Open Service
 Broker API](https://github.com/openservicebrokerapi/servicebroker) and is based on
-[`osb-starter-pack](https://github.com/pmorie/osb-starter-pack).
+[`osb-starter-pack`](https://github.com/pmorie/osb-starter-pack).
 
 The catalog is retrieved from a remote address. By default:
 
 ``
 $ export CATALOG_PATH=https://raw.githubusercontent.com/cheld/demo-broker/master/samples/catalog.json
 ``
+
 Customize as needed. This functionality can be used to
 * simulate a catalog look & feel.
 * implement the a REST service that generates this JSON as a first implementation step.
