@@ -191,16 +191,18 @@ func (b *BusinessLogic) Bind(request *osb.BindRequest, c *broker.RequestContext)
 	b.Lock()
 	defer b.Unlock()
 
-	instance, ok := b.instances[request.InstanceID]
+	_,ok := b.instances[request.InstanceID]
 	if !ok {
 		return nil, osb.HTTPStatusCodeError{
 			StatusCode: http.StatusNotFound,
 		}
 	}
 
+	params := map[string]interface{}{"token":"AKIAIOSFODNN7EXAMPLE:frJIUN8DYpKDtOLCwo//yllqDzg="}
+	fmt.Println(params)
 	response := broker.BindResponse{
 		BindResponse: osb.BindResponse{
-			Credentials: instance.Params,
+			Credentials: params,
 		},
 	}
 	if request.AcceptsIncomplete {
